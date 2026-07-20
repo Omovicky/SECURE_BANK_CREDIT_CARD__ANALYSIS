@@ -17,7 +17,7 @@ SecureBank Nigeria has noticed unusual patterns in credit card transactions and 
 
 ## Dataset
 | Property | Detail |
-|---|---|
+|----------|--------|
 | Source | Kaggle — teamincribo/credit-card-fraud |
 | File | credit_card_fraud.csv |
 | Rows | 8,000 transactions |
@@ -95,16 +95,8 @@ Dataset Note: The dataset contains Indian city names and INR currency despite be
 ### Page 2 — Transaction Behaviour and Spending Analysis
 <img width="720" height="446" alt="Transcation behaviour dashboard" src="https://github.com/user-attachments/assets/2a8648ba-f0f5-4100-90de-1bae0df05c8e" />
 
-
-
-
-
-
-
 ### Page 3 — Fraud Detection Anomalies and Risk Insights
-
-
-![Fraud Detection](powerbi/dashboard_screenshots/fraud_detection.png)
+<img width="720" height="461" alt="Fraud detection dashboard" src="https://github.com/user-attachments/assets/b4ae528b-d71c-4518-b4f5-74047a8d9231" />
 
 
 
