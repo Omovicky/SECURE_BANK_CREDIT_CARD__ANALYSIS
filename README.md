@@ -368,52 +368,104 @@ HAVING COUNT(*) >= 2
 ORDER BY fraud_count DESC
 
 -- END OF ALL 15 QUERIES
+```
 
+## Power BI Dashboard
+### Executive Summary
+KPI Cards:
+Transaction Count:        8,000
+Fraud Percentage:         49.86%
+INR Volume:               6.72M
+EUR Volume:               6.60M
+USD Volume:               6.65M
+Declined Transactions:    2,648
 
-## Key Findings
+Visuals:
+- Transaction Amount and Count Over Time (Line and Bar)
+-📱 Fraudulent Transactions by Device Type (Bar chart)
+- 🏪Top Merchants by Transaction Volume (Horizontal bar)
+-⏰ Transaction Volume by Hour (Column chart)
 
-### Fraud Analysis
+<img width="720" height="469" alt="Executive Summary Dashbaord" src="https://github.com/user-attachments/assets/0b33647c-dae4-4473-afd7-7d72ae8eadaf" />
 
-| Finding | Value |
-|---|---|
-| Overall fraud rate | 49.86% — nearly 1 in 2 transactions fraudulent |
-| Total fraudulent transactions | 3,989 out of 8,000 |
-| International fraud rate | 50.05% |
-| Local INR fraud rate | 49.50% |
-| Highest fraud device | Mobile — 51.39% |
-| IP address pattern | Every fraud transaction used a unique IP indicating IP rotation |
+### Transaction behaviour and Spending Analysis
+KPI Cards:
+Unique Card Holders:      7,651
+Unique Merchants:         7,027
+Peak Transaction Day:     Wednesday
+Peak Transaction Hour:    10:00 AM
 
-### Transaction Behaviour
+Visuals:
+- ⏰Transaction Volume by Hour (Column chart)
+- Transaction Volume by Day (Column chart)
+- 🌐Total Transaction Count by City (Horizontal bar)
+- 🛒Card Type by Transaction Volume (Clustered bar)
+- Top Cardholders by Total Spending (Horizontal bar)
 
-| Finding | Value |
-|---|---|
-| Busiest city | Ghaziabad — 53 transactions |
-| Top merchant by revenue | Yohannan and Sons — 16,623.12 |
-| Top cardholder by spending | Trisha Ghose — 12,373.36 |
-| Peak transaction hour | 10 AM |
-| Peak transaction day | Wednesday |
-| Top card type | Visa — 2,682 transactions |
+<img width="720" height="446" alt="Transcation behaviour dashboard" src="https://github.com/user-attachments/assets/91b9cbd7-ba55-44c0-b658-cfa5a20652dd" />
 
-### Operational Performance
+### Fraud Detection Anomalies and Risk Insights
+KPI Cards:
+Fraud Percentage:         49.86%
+Local Fraud Rate:         49.50%
+International Fraud Rate: 50.05%
+Declined Transactions:    2,648
 
-| Finding | Value |
-|---|---|
-| Approved transactions | 2,697 Response Code 0 |
-| Declined transactions | 2,648 Response Code 5 |
-| Failed transactions | 2,655 Response Code 12 |
-| In-Person fraud rate | 49.22% |
-| Online fraud rate | 50.54% |
+Visuals:
+-🚨 Transaction Count vs Fraud Rate by Currency (Bar and Line)
+- Transaction Response Code Table
+-  🌍Fraud Incidence by Merchant Category and Location (Heat map)
 
-## Dashboard Preview
+<img width="720" height="461" alt="Fraud detection dashboard" src="https://github.com/user-attachments/assets/e00264dc-ee7a-4ead-ab96-65de573d9ef2" />
 
-### Page 1 — Executive Summary
-<img width="720" height="469" alt="Executive Summary Dashbaord" src="https://github.com/user-attachments/assets/9cbb0a7f-9dd0-4aab-9fd0-4923adcf30da" />
+#  Key Insights
+##  Fraud Dectection & Transaction Analysis
 
-### Page 2 — Transaction Behaviour and Spending Analysis
-<img width="720" height="446" alt="Transcation behaviour dashboard" src="https://github.com/user-attachments/assets/2a8648ba-f0f5-4100-90de-1bae0df05c8e" />
+| **Insight** | **Detail** |
+|-------------|------------|
+| 🚨 Critical Fraud Rate | **49.86%** of all transactions are fraudulent — nearly **1 in every 2 transactions**. |
+| 🌍 International Risk | International fraud rate (**50.05%**) is slightly higher than local fraud (**49.50%**). |
+| 📱 Platform-Agnostic Fraud | Fraud occurs across all devices: **Mobile (51.39%)**, **Desktop (49.14%)**, **Tablet (49.12%)**, indicating no device is inherently safer. |
+| 🌐 IP Rotation Confirmed | Every fraudulent transaction originated from a **unique IP address**, suggesting deliberate IP rotation to evade detection. |
+| 💳 High-Risk Anomalies | Multiple **first-time, high-value purchases** (~**4,996.70**) were made on accounts with **no prior transaction history**. |
+| ❌ Gateway Failures | **2,648 Declined** and **2,655 Failed** transactions compared to only **2,697 Approved** transactions, indicating significant payment gateway issues. |
 
-### Page 3 — Fraud Detection Anomalies and Risk Insights
-<img width="720" height="461" alt="Fraud detection dashboard" src="https://github.com/user-attachments/assets/b4ae528b-d71c-4518-b4f5-74047a8d9231" />
+---
+
+# 📈 Transaction Behaviour Insights
+
+| **Insight** | **Detail** |
+|-------------|------------|
+| ⏰ Peak Activity | **Wednesday at 10:00 AM** recorded the highest transaction volume. |
+| 🏙️ Top City | **Ghaziabad** processed **53 transactions**, generating **127,716.30** in total transaction value. |
+| 🏪 Top Merchant | **Yohannan and Sons** generated the highest revenue at **16,623.12**. |
+| 💳 Card Distribution | **Visa**, **American Express**, and **Mastercard** each account for approximately **33%** of transactions. |
+| 👤 Top Spender | **Trisha Ghose** recorded the highest customer spend at **12,373.36**. |
+| 🛒 Transaction Channel | **In-Person:** **51%** • **Online:** **49%**, showing an almost even transaction distribution. |
+
+---
+
+# 💡 Recommendations
+
+| **Risk Vector** | **Recommendation** | **Target Metric** |
+|-----------------|--------------------|-------------------|
+|  Cross-Border Fraud | Deploy **dynamic geo-fencing** with **real-time Multi-Factor Authentication (MFA)** for all **USD** and **EUR** transactions. | Reduce **50.05%** international fraud rate. |
+| 🌐 Zero-History Transactions | Automatically place **high-value first-time purchases** on hold for manual verification. | Prevent stolen-card fraud on new accounts. |
+| ⚙️ Gateway Failures | Collaborate with payment processors to resolve **Response Codes 5 & 12**, improving validation and reducing timeouts. | Recover **2,648 declined transactions**. |
+| 🌐 IP Rotation | Replace traditional **IP blacklisting** with **device fingerprinting** and **behavioural analytics**. | Improve detection of rotating-IP fraud schemes. |
+| 🏪 Merchant Risk | Apply **transaction throttling** to high-risk merchant-city combinations during peak fraud periods. | Reduce fraud concentration in high-risk hotspots. |
+| 📱 Device Security | Strengthen **mobile authentication** through adaptive MFA and risk-based verification. | Lower the **51.39%** mobile fraud rate. |
+
+---
+
+## 📌 Executive Summary
+
+- Nearly **50%** of all transactions were fraudulent, highlighting a critical fraud exposure.
+- Fraud is **consistent across all devices**, with mobile transactions showing the highest risk.
+- **International transactions** present slightly greater fraud risk than domestic transactions.
+- Fraudsters consistently use **unique IP addresses**, reducing the effectiveness of traditional IP blocking.
+- Payment gateway performance requires immediate attention due to the high volume of failed and declined transactions.
+- Implementing **behaviour-based fraud detection**, **adaptive authentication**, and **real-time transaction monitoring** would significantly strengthen fraud prevention while improving legitimate transaction success rates.
 
 
 
