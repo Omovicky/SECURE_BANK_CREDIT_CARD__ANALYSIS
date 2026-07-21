@@ -3,11 +3,8 @@
 ![Status](https://img.shields.io/badge/Status-Completed-green)
 ![Tools](https://img.shields.io/badge/Tools-Excel%20%7C%20SQL%20Server%20%7C%20Power%20BI-blue)
 
-## Project Background
-SecureBank Nigeria identified unusual patterns in credit card transactions and commissioned a full analytical review of 8,000 transactions to understand spending behaviours, detect fraud patterns, and surface actionable insights for the Chief Risk Officer.
-
-## Problem Statement
-SecureBank Nigeria has noticed unusual patterns in credit card transactions and wants to analyse spending behaviours, identify transaction anomalies, and understand customer usage patterns better. This analysis will help improve fraud detection protocols and enhance customer service by understanding normal transaction behaviours.
+## Project Overview
+SecureBank Nigeria identified unusual patterns in credit card transactions and commissioned a full analytical review of 8,000 transactions to better understand spending behaviours, detect fraud patterns, and surface actionable insights.Te goal is to strengthen fraud detection protocol,improve customer service by understanding normal transaction behaviours, and provide data driven recommendation for to support the Chief Risk Officer in reducing risk and enhancing operational efficency.
 
 ## Objectives
 - Analyse transaction behaviour and spending patterns across merchants, cities, card types, and cardholders
@@ -15,7 +12,15 @@ SecureBank Nigeria has noticed unusual patterns in credit card transactions and 
 - Evaluate transaction performance including response codes and declined transactions
 - Provide strategic recommendations to reduce fraud and improve operational efficiency
 
-## Dataset
+  ## Tools and Technologies
+| Tool | Purpose |
+|---|---|
+| Microsoft Excel | Data cleaning and transformation |
+| SQL Server SSMS | Data import, querying, and answering 15 business questions |
+| Power BI Desktop | Interactive dashboard development and visualisation |
+| PowerPoint | Presentation of findings to stakeholder audience |
+
+## Dataset overview
 | Property | Detail |
 |----------|--------|
 | Source | Kaggle — teamincribo/credit-card-fraud |
@@ -26,32 +31,344 @@ SecureBank Nigeria has noticed unusual patterns in credit card transactions and 
 | Currencies | INR, USD, EUR |
 Dataset Note: The dataset contains Indian city names and INR currency despite being framed as a Nigerian bank project. INR transactions were treated as local and USD/EUR as international for analytical purposes. This limitation is documented transparently throughout the analysis.
 
-## Tools and Technologies
-| Tool | Purpose |
-|---|---|
-| Microsoft Excel | Data cleaning and transformation |
-| SQL Server SSMS | Data import, querying, and answering 15 business questions |
-| Power BI Desktop | Interactive dashboard development and visualisation |
-| PowerPoint | Presentation of findings to stakeholder audience |
+### Column Reference
 
-## 15 Business Questions Answered
-| Number | Question | Tool |
+| Column | Data Type | Description |
 |---|---|---|
-| Q1 | Total transaction amounts and counts over time | SQL and Power BI |
-| Q2 | Merchants generating highest transaction revenue | SQL and Power BI |
-| Q3 | Most common merchant categories MCC by volume | SQL and Power BI |
-| Q4 | Cities with highest transaction activity | SQL and Power BI |
-| Q5 | Peak transaction hours and days of the week | SQL and Power BI |
-| Q6 | Card types with highest transaction volumes | SQL and Power BI |
-| Q7 | Cardholders with highest total spending | SQL and Power BI |
-| Q8 | Percentage of transactions flagged as fraudulent | SQL and Power BI |
-| Q9 | Patterns in device info and IP addresses linked to fraud | SQL and Power BI |
-| Q10 | Transaction amounts by transaction source | SQL and Power BI |
-| Q11 | Most frequent response codes for declined transactions | SQL |
-| Q12 | Duplicate or repeated transaction IDs | SQL |
-| Q13 | International vs local transactions volume and fraud rate | SQL and Power BI |
-| Q14 | Transactions with highest amounts relative to cardholder history | SQL |
-| Q15 | Correlation between merchant category location and fraud | SQL and Power BI |
+| Transaction_Datetime | datetime | Full transaction timestamp |
+| DATE | date | Extracted transaction date |
+| HOUR | number | Extracted transaction hour 0 to 23 |
+| DAY_OF_THE_WEEK | text | Day name e.g. Monday |
+| MONTH | text | Month name e.g. January |
+| Amount | money | Transaction amount |
+| Cardholder_name | text | Full name of cardholder |
+| Merchant_name | text | Merchant business name |
+| MCC | number | Merchant Category Code |
+| City | text | Transaction city |
+| Currency | text | INR, USD, or EUR |
+| Card_type | text | Visa, Mastercard, American Express |
+| Response_code | number | 0 Approved, 5 Declined, 12 Failed |
+| Transaction_id | text | Unique transaction identifier |
+| fraud_label | text | Fraudlenr or legitimate |
+| Prev_transactions | text | 1, 2, 3 or more, Unknown |
+| Tran_Source | text | Online or In-Person |
+| IP_address | text | Transaction IP address |
+| Device_type | text | Mobile, Desktop, or Tablet |
+
+### Dataset Limitations
+
+| Limitation | Impact |
+|---|---|
+| Indian geography | Dataset contains Indian cities despite Nigerian bank framing — INR treated as local, USD and EUR as international |
+| No ZIP code | Geographic analysis limited to city level only |
+| No cardholder ID | Cardholder name used as unique identifier |
+| MCC numeric only | No category name mapping available |
+| fraud_label typo | Stored as Fraudlenr instead of Fraudulent due to Excel formula error — all SQL queries reference stored value |
+
+---
+
+## Data Cleaning Process
+
+### Issues Identified
+
+| Number | Column | Issue | Records | Action |
+|---|---|---|---|---|
+| 1 | Previous Transactions | 2,043 missing values | 2,043 | Filled with Unknown |
+| 2 | User Account Information | 4,010 missing values | 4,010 | Filled with Unknown |
+| 3 | Transaction Notes | Random junk placeholder text | 8,000 | Column deleted |
+| 4 | All columns | Long inconsistent names | 20 cols | All renamed |
+| 5 | Transaction Date and Time | Stored as text | 8,000 | Converted and split |
+| 6 | Multiple columns | Leading trailing spaces in headers | 6 cols | Spaces removed |
+| 7 | Previous Transactions | None and Unknown used inconsistently | Multiple | Replaced None with Unknown |
+| 8 | Transaction ID | Checked for duplicates | 0 found | No action needed |
+| 9 | Transaction Amount | Checked for negative values | 0 found | No action needed |
+### Cleaning Steps
+
+Step 1 — Opened raw CSV in Excel and saved immediately as securebank_cleaned.xlsx to protect the original file
+
+Step 2 — Converted data to Excel Table using Ctrl + T and froze header row
+
+Step 3 — Filled 2,043 blank cells in Previous Transactions with Unknown using Ctrl + G — Special — Blanks
+
+Step 4 — Filled 4,010 blank cells in User Account Information with Unknown using same method
+
+Step 5 — Used Ctrl + H Find and Replace to replace all None values with Unknown in Previous Transactions column
+
+Step 6 — Deleted the Transaction Notes column as it contained random placeholder text with no analytical value
+
+Step 7 — Added 4 helper columns for time analysis:
+- DATE using formula =INT(A2) formatted as Date
+- HOUR using formula =HOUR(A2) formatted as Number
+- DAY OF THE WEEK using formula =TEXT(A2,"DDDD")
+- MONTH using formula =TEXT(A2,"MMMM")
+
+Step 8 — Formatted Transaction Amount column as Number with 2 decimal places
+
+Step 9 — Removed leading and trailing spaces from 6 column headers
+
+Step 10 — Renamed all 23 columns to short SQL-friendly names
+
+Step 11 — Added fraud_label column with formula =IF(R2=1,"Fraudlenr","legitimate")
+
+Step 12 — Saved final cleaned file as credit_card_fraud_clean.xlsx
+
+## Exploratory Analysis
+
+### Database Setup
+
+```sql
+-- Create database
+CREATE DATABASE Credit_card_fraud
+
+-- Verify import was successful
+SELECT TOP 10 *
+FROM [dbo].[credit_card_fraud clean]
+
+-- Confirm row count
+SELECT COUNT(*) AS total_rows
+FROM [dbo].[credit_card_fraud clean]
+-- VERIFY IMPORT
+SELECT TOP 10 *
+FROM [dbo].[credit_card_fraud clean]
+
+SELECT COUNT(*) AS total_rows
+FROM [dbo].[credit_card_fraud clean]
+
+-- Q1: TOTAL TRANSACTION AMOUNTS AND COUNTS OVER TIME
+SELECT
+    Date,
+    MONTH,
+    COUNT(*) AS total_transactions,
+    SUM([Amount]) AS total_amount,
+    AVG([Amount]) AS avg_amount
+FROM [dbo].[credit_card_fraud clean]
+GROUP BY DATE, MONTH
+ORDER BY DATE
+
+-- Q2: MERCHANTS GENERATING HIGHEST TRANSACTION REVENUE
+SELECT TOP 20
+    Merchant_name,
+    COUNT(*) AS total_transaction,
+    SUM([Amount]) AS total_revenue,
+    AVG([Amount]) AS transaction_value,
+    SUM(CASE WHEN is_label = 1 THEN 1 ELSE 0 END) AS fraud_count
+FROM [dbo].[credit_card_fraud clean]
+GROUP BY Merchant_name
+ORDER BY total_revenue DESC
+
+-- Q3: MOST COMMON MERCHANT CATEGORIES MCC BY VOLUME
+SELECT TOP 15
+    MCC,
+    COUNT(*) AS total_transaction,
+    SUM([Amount]) AS total_amount
+FROM [dbo].[credit_card_fraud clean]
+GROUP BY MCC
+ORDER BY total_transaction DESC
+
+-- Q4: CITIES WITH HIGHEST TRANSACTION ACTIVITY
+SELECT TOP 20
+    [City],
+    COUNT(*) AS transaction_count,
+    SUM([Amount]) AS total_amount
+FROM [dbo].[credit_card_fraud clean]
+GROUP BY [City]
+ORDER BY transaction_count DESC
+
+-- Q5: PEAK TRANSACTION HOURS AND DAYS OF THE WEEK
+SELECT
+    HOUR,
+    DATE,
+    DAY_OF_THE_WEEK,
+    COUNT(*) AS transaction_count,
+    SUM([Amount]) AS total_amount
+FROM [dbo].[credit_card_fraud clean]
+GROUP BY HOUR, date, DAY_OF_THE_WEEK
+ORDER BY transaction_count DESC
+
+-- Q6: CARD TYPES WITH HIGHEST TRANSACTION VOLUMES
+SELECT
+    Card_type,
+    COUNT(*) AS transaction_count,
+    SUM([Amount]) AS total_amount,
+    AVG([Amount]) AS avg_amount
+FROM [dbo].[credit_card_fraud clean]
+GROUP BY card_type
+ORDER BY transaction_count DESC
+
+-- Q7: CARDHOLDERS WITH HIGHEST TOTAL SPENDING
+SELECT TOP 10
+    Cardholder_name,
+    COUNT(*) AS transaction_count,
+    SUM([Amount]) AS total_spending,
+    AVG([Amount]) AS avg_transaction,
+    MAX([Amount]) AS max_single_tnx
+FROM [dbo].[credit_card_fraud clean]
+GROUP BY Cardholder_name
+ORDER BY total_spending DESC
+
+-- Q8: PERCENTAGE OF TRANSACTIONS FLAGGED AS FRAUDULENT
+SELECT
+    COUNT(*) AS total_transaction,
+    SUM(CASE WHEN [fraud_label] = 'Fraudlenr'
+        THEN 1 ELSE 0 END) AS fraud_count,
+    SUM(CASE WHEN [fraud_label] = 'legitimate'
+        THEN 1 ELSE 0 END) AS legitimate_count,
+    CAST(ROUND(
+        SUM(CASE WHEN [fraud_label] = 'Fraudlenr'
+            THEN 1.0 ELSE 0 END)
+        / COUNT(*) * 100, 2)
+    AS DECIMAL(10,2)) AS fraud_percentage,
+    CAST(ROUND(
+        SUM(CASE WHEN [fraud_label] = 'legitimate'
+            THEN 1.0 ELSE 0 END)
+        / COUNT(*) * 100, 2)
+    AS DECIMAL(10,2)) AS legitimate_percentage
+FROM [dbo].[credit_card_fraud clean]
+
+-- Q9A: FRAUD BY DEVICE TYPE
+SELECT
+    Device_type,
+    COUNT(*) AS total_transactions,
+    SUM(CASE WHEN [fraud_label] = 'fraudlenr'
+        THEN 1 ELSE 0 END) AS fraud_count,
+    CAST(ROUND(
+        SUM(CASE WHEN [fraud_label] = 'fraudlenr'
+            THEN 1.0 ELSE 0 END)
+        / COUNT(*) * 100, 2)
+    AS DECIMAL(10,2)) AS fraud_rate_pct
+FROM [dbo].[credit_card_fraud clean]
+GROUP BY device_type
+ORDER BY fraud_rate_pct DESC
+
+-- Q9B: TOP IP ADDRESSES WITH MOST FRAUDULENT TRANSACTIONS
+SELECT TOP 20
+    IP_address,
+    COUNT(*) AS total_transactions,
+    SUM(CASE WHEN [fraud_label] = 'fraudlenr'
+        THEN 1 ELSE 0 END) AS fraud_count
+FROM [dbo].[credit_card_fraud clean]
+WHERE [fraud_label] = 'fraudlenr'
+GROUP BY IP_address
+ORDER BY fraud_count DESC
+
+-- Q10: TRANSACTION AMOUNTS BY TRANSACTION SOURCE
+SELECT
+    Tran_Source,
+    COUNT(*) AS transaction_count,
+    CAST(ROUND(SUM([Amount]), 2)
+        AS DECIMAL(10,2)) AS total_amount,
+    CAST(ROUND(AVG([Amount]), 2)
+        AS DECIMAL(10,2)) AS AVG_amount,
+    SUM(CASE WHEN [fraud_label] = 'fraudlenr'
+        THEN 1 ELSE 0 END) AS fraud_count,
+    CAST(ROUND(
+        SUM(CASE WHEN [fraud_label] = 'fraudlenr'
+            THEN 1.0 ELSE 0 END)
+        / COUNT(*) * 100, 2)
+    AS DECIMAL(10,2)) AS fraud_rate_pct
+FROM [dbo].[credit_card_fraud clean]
+GROUP BY tran_source
+ORDER BY total_amount DESC
+
+-- Q11: MOST FREQUENT RESPONSE CODES
+SELECT
+    [Response_code],
+    COUNT(*) AS occurrence_count,
+    CAST(ROUND(
+        COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2)
+    AS DECIMAL(10,2)) AS pct_of_total,
+    SUM(CASE WHEN fraud_label = 'Fraudlenr'
+        THEN 1 ELSE 0 END) AS fraud_count
+FROM [dbo].[credit_card_fraud clean]
+GROUP BY [Response_code]
+ORDER BY occurrence_count DESC
+
+-- Q12: DUPLICATE OR REPEATED TRANSACTION IDs
+SELECT
+    COUNT(*) AS total_records,
+    COUNT(DISTINCT Transaction_id) AS unique_txn_ids,
+    COUNT(*) - COUNT(DISTINCT Transaction_id) AS duplicate_count
+FROM [dbo].[credit_card_fraud clean]
+
+-- Q13: INTERNATIONAL VS LOCAL TRANSACTIONS
+SELECT
+    Currency,
+    CASE
+        WHEN Currency = 'INR' THEN 'Local'
+        ELSE 'International'
+    END AS transaction_type,
+    COUNT(*) AS transaction_count,
+    CAST(ROUND(SUM([Amount]), 2)
+        AS DECIMAL(10,2)) AS total_amount,
+    CAST(ROUND(AVG([Amount]), 2)
+        AS DECIMAL(10,2)) AS avg_amount,
+    SUM(CASE WHEN fraud_label = 'Fraudlenr'
+        THEN 1 ELSE 0 END) AS fraud_count,
+    CAST(ROUND(
+        SUM(CASE WHEN fraud_label = 'Fraudlenr'
+            THEN 1.0 ELSE 0 END)
+        / COUNT(*) * 100, 2)
+    AS DECIMAL(10,2)) AS fraud_rate_pct
+FROM [dbo].[credit_card_fraud clean]
+GROUP BY Currency,
+    CASE
+        WHEN Currency = 'INR' THEN 'Local'
+        ELSE 'International'
+    END
+ORDER BY transaction_count DESC
+
+-- Q14: HIGH VALUE TRANSACTIONS RELATIVE TO CARDHOLDER HISTORY
+WITH cardholder_stats AS (
+    SELECT
+        Cardholder_name,
+        AVG([Amount]) AS avg_spend,
+        STDEV([Amount]) AS std_spend
+    FROM [dbo].[credit_card_fraud clean]
+    GROUP BY Cardholder_name
+),
+flagged AS (
+    SELECT
+        t.Transaction_id,
+        t.Cardholder_name,
+        t.[Amount] AS transaction_amount,
+        t.Transaction_Datetime,
+        t.Merchant_name,
+        t.fraud_label,
+        cs.avg_spend,
+        CAST(ROUND(
+            (t.[Amount] - cs.avg_spend)
+            / NULLIF(cs.std_spend, 0), 2)
+        AS DECIMAL(10,2)) AS z_score
+    FROM [dbo].[credit_card_fraud clean] t
+    JOIN cardholder_stats cs
+        ON t.Cardholder_name = cs.Cardholder_name
+)
+SELECT TOP 50 *
+FROM flagged
+WHERE z_score > 2
+ORDER BY z_score DESC
+
+-- Q15: CORRELATION BETWEEN MERCHANT CATEGORY LOCATION AND FRAUD
+SELECT TOP 20
+    [MCC] AS merchant_category,
+    [City] AS city,
+    COUNT(*) AS total_transactions,
+    SUM(CASE WHEN fraud_label = 'Fraudlenr'
+        THEN 1 ELSE 0 END) AS fraud_count,
+    CAST(ROUND(
+        SUM(CASE WHEN fraud_label = 'Fraudlenr'
+            THEN 1.0 ELSE 0 END)
+        / COUNT(*) * 100, 2)
+    AS DECIMAL(10,2)) AS fraud_rate_pct,
+    CAST(ROUND(SUM([Amount]), 2)
+        AS DECIMAL(10,2)) AS total_amount
+FROM [dbo].[credit_card_fraud clean]
+GROUP BY [MCC], [City]
+HAVING COUNT(*) >= 2
+ORDER BY fraud_count DESC
+
+-- END OF ALL 15 QUERIES
+
 
 ## Key Findings
 
