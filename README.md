@@ -481,7 +481,7 @@ Visuals:
 - Implementing **behaviour-based fraud detection**, **adaptive authentication**, and **real-time transaction monitoring** would significantly strengthen fraud prevention while improving legitimate transaction success rates.
 
 ## Connect With Me
-https://www.lonkedin.com/in/victoria-omorodion
+https://www.linkedin.com/in/victoria-omorodion
 
 
 
