@@ -11,7 +11,7 @@
 - [Exploratory Analysis](#exploratory-analysis)
 - [Power BI Dashboard](#power-bi-dashboard)
 - [Key Insight](#key-insights)
-- [Executive Summary](#executive-summary)
+- [Summary](summary)
 
 ## Project Overview
 SecureBank Nigeria identified unusual patterns in credit card transactions and commissioned a full analytical review of 8,000 transactions to better understand spending behaviours, detect fraud patterns, and surface actionable insights.Te goal is to strengthen fraud detection protocol,improve customer service by understanding normal transaction behaviours, and provide data driven recommendation for to support the Chief Risk Officer in reducing risk and enhancing operational efficency.
@@ -470,7 +470,7 @@ Visuals:
 
 ---
 
-##  Executive Summary
+## Summary
 
 - Nearly **50%** of all transactions were fraudulent, highlighting a critical fraud exposure.
 - Fraud is **consistent across all devices**, with mobile transactions showing the highest risk.
