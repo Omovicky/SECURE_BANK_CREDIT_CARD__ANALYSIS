@@ -12,6 +12,7 @@
 - [Power BI Dashboard](#power-bi-dashboard)
 - [Key Insight](#key-insights)
 - [Summary](#summary)
+- [Connect With Me](#connect-with-me)
 
 ## Project Overview
 SecureBank Nigeria identified unusual patterns in credit card transactions and commissioned a full analytical review of 8,000 transactions to better understand spending behaviours, detect fraud patterns, and surface actionable insights.Te goal is to strengthen fraud detection protocol,improve customer service by understanding normal transaction behaviours, and provide data driven recommendation for to support the Chief Risk Officer in reducing risk and enhancing operational efficency.
@@ -479,7 +480,8 @@ Visuals:
 - Payment gateway performance requires immediate attention due to the high volume of failed and declined transactions.
 - Implementing **behaviour-based fraud detection**, **adaptive authentication**, and **real-time transaction monitoring** would significantly strengthen fraud prevention while improving legitimate transaction success rates.
 
-
+## Connect With Me
+https://www.lonkedin.com/in/victoria-omorodion
 
 
 
